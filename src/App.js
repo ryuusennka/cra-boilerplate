@@ -1,28 +1,15 @@
+import styles, { d1 } from './style.module.scss';
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import classnames from 'classnames';
 
-class App extends Component {
+export default class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <div className={d1}>asd</div>
+        <h1 className={styles.foo}>hasd</h1>
+        <div className={classnames(true && styles.d1)}>asd</div>
       </div>
     );
   }
 }
-
-export default App;
