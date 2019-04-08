@@ -814,7 +814,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.1.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2":
   version "7.4.3"
   resolved "http://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.4.3.tgz#79888e452034223ad9609187a0ad1fe0d2ad4bdc"
   integrity sha1-eYiORSA0IjrZYJGHoK0f4NKtS9w=
@@ -8271,6 +8271,13 @@ react-is@^16.8.1:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
+
+react-powerplug@^1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/react-powerplug/download/react-powerplug-1.0.0.tgz#f9c10a761ece115661b8fd10920c4e573ea95909"
+  integrity sha1-+cEKdh7OEVZhuP0QkgxOVz6pWQk=
+  dependencies:
+    "@babel/runtime" "^7.0.0"
 
 react-router-dom@^5.0.0:
   version "5.0.0"
