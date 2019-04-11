@@ -1,45 +1,25 @@
 import React, { Component } from 'react';
-import { State, Toggle } from 'react-powerplug';
+import propTypes from 'prop-types';
 
-export default class Home extends Component {
-  shouldComponentUpdate(state, nextState) {
-    console.log('不会触发 shouldComponentUpdate');
-  }
-  componentDidUpdate() {
-    console.log('1');
-  }
+class Hello extends Component {
+  static propTypes = {
+    money: propTypes.number,
+    name: propTypes.string.isRequired,
+  };
   render() {
-    var obj = {};
-    obj.flag = true;
     return (
       <div>
-        <State initial={{ counter: 0 }}>
-          {({ state, setState }) => (
-            <div>
-              <h1>Counter: {state.counter}</h1>
-              <button
-                className="btn btn-danger"
-                onClick={() => setState({ counter: state.counter - 1 })}
-              >
-                Decrement
-              </button>
-              <button
-                className="btn btn-success"
-                onClick={() => setState({ counter: state.counter + 1 })}
-              >
-                Increment
-              </button>
-            </div>
-          )}
-        </State>
-        <Toggle initial={obj.flag}>
-          {({ on, toggle }) => (
-            <div>
-              <input type="checkbox" onChange={toggle} checked={on} />
-              {obj.flag}
-            </div>
-          )}
-        </Toggle>
+        Hello, {this.props.name}, you got money: {this.props.money.toFixed(2)}
+      </div>
+    );
+  }
+}
+
+export default class Home extends Component {
+  render() {
+    return (
+      <div>
+        <Hello name="sennka" money={99} />
       </div>
     );
   }
