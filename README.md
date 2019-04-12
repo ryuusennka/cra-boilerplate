@@ -1,28 +1,28 @@
-<!-- TOC -->
-
-- [react 基础](#react-基础)
-  - [上下文](#上下文)
-  - [高阶组件](#高阶组件)
-  - [defaultProps 和类型检查 PropTypes](#defaultprops-和类型检查-proptypes)
+- [react 基础 s](#react-%E5%9F%BA%E7%A1%80-s)
+  - [上下文](#%E4%B8%8A%E4%B8%8B%E6%96%87)
+  - [高阶组件 higher-order components(HOC)](#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-higher-order-componentshoc)
+  - [defaultProps 和类型检查 PropTypes](#defaultprops-%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5-proptypes)
+  - [使用 React render prop components 替代 HOC 高阶组件](#%E4%BD%BF%E7%94%A8-react-render-prop-components-%E6%9B%BF%E4%BB%A3-hoc-%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6)
+  - [React State without a Constructor](#react-state-without-a-constructor)
+  - [错误边界](#%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C)
 - [react-router-dom](#react-router-dom)
-  - [获取参数路由：](#获取参数路由)
-  - [获取页面传参](#获取页面传参)
-  - [页面跳转](#页面跳转)
-- [性能优化](#性能优化)
-  - [使用 shouldComponentUpdate](#使用-shouldcomponentupdate)
+  - [获取参数路由：](#%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1)
+  - [获取页面传参](#%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2%E4%BC%A0%E5%8F%82)
+  - [页面跳转](#%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC)
+- [性能优化](#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96)
+  - [使用 shouldComponentUpdate](#%E4%BD%BF%E7%94%A8-shouldcomponentupdate)
   - [PureComponent](#purecomponent)
-  - [使用 React.Fragment 像 Vue 使用 template 那样输出](#使用-reactfragment-像-vue-使用-template-那样输出)
-  - [想要返回多个元素而不添加顶级元素的三种方法：](#想要返回多个元素而不添加顶级元素的三种方法)
-    - [第一种： 使用数组](#第一种-使用数组)
-    - [第二种： 使用 Fragment](#第二种-使用-fragment)
-    - [第三种： 使用高阶组件](#第三种-使用高阶组件)
-- [技巧](#技巧)
-  - [使用 react-powerplug 简化代码](#使用-react-powerplug-简化代码)
-- [其它资料](#其它资料)
+  - [使用 React.Fragment 像 Vue 使用 template 那样输出](#%E4%BD%BF%E7%94%A8-reactfragment-%E5%83%8F-vue-%E4%BD%BF%E7%94%A8-template-%E9%82%A3%E6%A0%B7%E8%BE%93%E5%87%BA)
+  - [想要返回多个元素而不添加顶级元素的三种方法：](#%E6%83%B3%E8%A6%81%E8%BF%94%E5%9B%9E%E5%A4%9A%E4%B8%AA%E5%85%83%E7%B4%A0%E8%80%8C%E4%B8%8D%E6%B7%BB%E5%8A%A0%E9%A1%B6%E7%BA%A7%E5%85%83%E7%B4%A0%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E6%B3%95)
+    - [第一种： 使用数组](#%E7%AC%AC%E4%B8%80%E7%A7%8D-%E4%BD%BF%E7%94%A8%E6%95%B0%E7%BB%84)
+    - [第二种： 使用 Fragment](#%E7%AC%AC%E4%BA%8C%E7%A7%8D-%E4%BD%BF%E7%94%A8-fragment)
+    - [第三种： 使用高阶组件](#%E7%AC%AC%E4%B8%89%E7%A7%8D-%E4%BD%BF%E7%94%A8%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6)
+- [技巧](#%E6%8A%80%E5%B7%A7)
+  - [使用 react-powerplug 简化代码](#%E4%BD%BF%E7%94%A8-react-powerplug-%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81)
+  - [显示或隐藏，少写一个 return](#%E6%98%BE%E7%A4%BA%E6%88%96%E9%9A%90%E8%97%8F%E5%B0%91%E5%86%99%E4%B8%80%E4%B8%AA-return)
+- [其它资料](#%E5%85%B6%E5%AE%83%E8%B5%84%E6%96%99)
 
-<!-- /TOC -->
-
-# react 基础
+# react 基础 s
 
 ## 上下文
 
@@ -138,7 +138,7 @@ Comment.contextTypes = {
 };
 ```
 
-## 高阶组件
+## 高阶组件 higher-order components(HOC)
 
 什么是高阶组件？
 
@@ -382,6 +382,108 @@ export default class Home extends Component {
  }
 
 ```
+
+例子： 可以传入的是多种
+
+```js
+static propTypes = {
+  children: propTypes.oneOfType([ // 下面两种类型其中之一
+    PropTypes.node, // 单个的是组件节点
+    PropTypes.arrayOf(PropTypes.node) // 或者是数组的
+  ]).isRequired
+}
+
+```
+
+## 使用 React render prop components 替代 HOC 高阶组件
+
+能够用高阶组件实现的东西，也能用 Render Props 实现，而且`Render Props`比高阶组件还有更多的好处。
+
+```js
+import React from 'react';
+import propTypes from 'prop-types';
+// 对传入的 Component 进行 withMouse 功能增强
+class Mouse extends React.Component {
+  state = { x: 0, y: 0 };
+
+  static propTypes = {
+    render: propTypes.func.isRequired,
+  };
+
+  handleMouseMove = event => {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY,
+    });
+  };
+  render() {
+    return (
+      <div
+        style={{ position: 'fixed', top: 40, left: 0, right: 0, bottom: 0 }}
+        onMouseMove={this.handleMouseMove}
+      >
+        {/* <Component {...this.props} mouse={this.state} /> */}
+        {/* 这里就没有传进来的组件了,这里取参数的方法很明确，就是this.state */}
+        {this.props.render(this.state, this.props, 'foobar')}
+      </div>
+    );
+  }
+}
+
+const Position = ({ x, y }) => (
+  <h1>
+    The mouse position is {x}, {y}
+  </h1>
+);
+
+const App = props => {
+  return (
+    <React.Fragment>
+      <Mouse render={props => <Position {...props} />} />
+    </React.Fragment>
+  );
+};
+
+export default App;
+```
+
+## React State without a Constructor
+
+比较下面代码有什么区别：
+
+```js
+export default class Home extends Component {
+  state = {
+    x: 0,
+    y: 0,
+  };
+  render() {
+    return <div />;
+  }
+}
+```
+
+和
+
+```js
+export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      x: 0,
+      y: 0,
+    };
+  }
+  render() {
+    return <div />;
+  }
+}
+```
+
+## 错误边界
+
+有时候，由于一个组件的错误(或说崩溃)，会导致整个页面一个空白。但是我们希望如果组件出错了，就不显示
+这个组件，其它的还是应该显示。
 
 # react-router-dom
 
@@ -810,6 +912,67 @@ export default class Home extends Component {
     );
   }
 }
+```
+
+## 显示或隐藏，少写一个 return
+
+如果 toggle 为真，显示 List 组件
+
+```js
+{
+  this.state.toggle && <List list={list} />;
+}
+```
+
+例子
+
+```js
+import React, { Component } from 'react';
+
+const list = ['a', 'b', 'c'];
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toggle: true,
+    };
+  }
+
+  onToggleList = () => {
+    this.setState(prevState => ({
+      toggle: !prevState.toggle,
+    }));
+  };
+
+  render() {
+    return (
+      <div>
+        <Toggle toggle={this.state.toggle} onToggleList={this.onToggleList} />
+        {this.state.toggle && <List list={list} />}
+      </div>
+    );
+  }
+}
+
+const Toggle = ({ toggle, onToggleList }) => (
+  <button type="button" onClick={onToggleList}>
+    {toggle ? 'Hide' : 'Show'}
+  </button>
+);
+
+const List = ({ list }) => (
+  <ul>
+    {list.map(item => (
+      <Item key={item} item={item} />
+    ))}
+  </ul>
+);
+
+const Item = ({ item }) => <li>{item}</li>;
+
+export default App;
 ```
 
 # 其它资料

@@ -1,26 +1,39 @@
 import React, { Component } from 'react';
-import propTypes from 'prop-types';
+import Broken from './Broken';
+import ErrorBoundary from './ErrorBoundary';
 
-class Hello extends Component {
-  static propTypes = {
-    money: propTypes.number,
-    name: propTypes.string.isRequired,
+class App extends Component {
+  state = {
+    counter: 0,
   };
+
+  increment = () => {
+    this.setState(prevState => ({ counter: prevState.counter + 1 }));
+  };
+
+  decrement = () => {
+    this.setState(prevState => ({ counter: prevState.counter - 1 }));
+  };
+
   render() {
     return (
-      <div>
-        Hello, {this.props.name}, you got money: {this.props.money.toFixed(2)}
+      <div className="App">
+        <h1>Hello React</h1>
+        <hr />
+        <div>Counter: {this.state.counter}</div>
+        <button className="btn btn-success" onClick={this.increment}>
+          Increment
+        </button>
+        <button className="btn btn-danger" onClick={this.decrement}>
+          Decrement
+        </button>
+        <hr />
+        <ErrorBoundary>
+          <Broken />
+        </ErrorBoundary>
       </div>
     );
   }
 }
 
-export default class Home extends Component {
-  render() {
-    return (
-      <div>
-        <Hello name="sennka" money={99} />
-      </div>
-    );
-  }
-}
+export default App;
