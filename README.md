@@ -1,10 +1,11 @@
-- [react 基础 s](#react-%E5%9F%BA%E7%A1%80-s)
+- [react 基础](#react-%E5%9F%BA%E7%A1%80)
   - [上下文](#%E4%B8%8A%E4%B8%8B%E6%96%87)
   - [高阶组件 higher-order components(HOC)](#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-higher-order-componentshoc)
   - [defaultProps 和类型检查 PropTypes](#defaultprops-%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5-proptypes)
   - [使用 React render prop components 替代 HOC 高阶组件](#%E4%BD%BF%E7%94%A8-react-render-prop-components-%E6%9B%BF%E4%BB%A3-hoc-%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6)
   - [React State without a Constructor](#react-state-without-a-constructor)
   - [错误边界](#%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C)
+  - [react 生命周期](#react-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
 - [react-router-dom](#react-router-dom)
   - [获取参数路由：](#%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1)
   - [获取页面传参](#%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2%E4%BC%A0%E5%8F%82)
@@ -22,7 +23,7 @@
   - [显示或隐藏，少写一个 return](#%E6%98%BE%E7%A4%BA%E6%88%96%E9%9A%90%E8%97%8F%E5%B0%91%E5%86%99%E4%B8%80%E4%B8%AA-return)
 - [其它资料](#%E5%85%B6%E5%AE%83%E8%B5%84%E6%96%99)
 
-# react 基础 s
+# react 基础
 
 ## 上下文
 
@@ -484,6 +485,10 @@ export default class Home extends Component {
 
 有时候，由于一个组件的错误(或说崩溃)，会导致整个页面一个空白。但是我们希望如果组件出错了，就不显示
 这个组件，其它的还是应该显示。
+
+## react 生命周期
+
+![image](https://wx2.sinaimg.cn/large/006vbNRogy1g231ft2w9ej30zj0i5af8.jpg)
 
 # react-router-dom
 
