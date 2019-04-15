@@ -490,7 +490,11 @@ export default class Home extends Component {
 
 ## react 生命周期
 
+[http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+
 ![image](https://wx2.sinaimg.cn/large/006vbNRogy1g231ft2w9ej30zj0i5af8.jpg)
+
+![lifecycle](docs/assets/images/README-20190415141657.png)
 
 ## 一切都可以做成组件
 
