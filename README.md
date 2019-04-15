@@ -13,6 +13,7 @@
   - [获取页面传参](#%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2%E4%BC%A0%E5%8F%82)
   - [页面跳转](#%E9%A1%B5%E9%9D%A2%E8%B7%B3%E8%BD%AC)
 - [性能优化](#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96)
+  - [componentWillUnmount](#componentwillunmount)
   - [使用 shouldComponentUpdate](#%E4%BD%BF%E7%94%A8-shouldcomponentupdate)
   - [PureComponent](#purecomponent)
   - [使用 React.Fragment 像 Vue 使用 template 那样输出](#%E4%BD%BF%E7%94%A8-reactfragment-%E5%83%8F-vue-%E4%BD%BF%E7%94%A8-template-%E9%82%A3%E6%A0%B7%E8%BE%93%E5%87%BA)
@@ -527,7 +528,6 @@ export default class Home extends Component {
     );
   }
 }
-
 ```
 
 # react-router-dom
@@ -608,7 +608,36 @@ export default class Contact extends Component {
 
 # 性能优化
 
+## componentWillUnmount
+
+在组件从 DOM 中移除的时候立刻被调用。
+
+在该方法中执行任何必要的清理，比如无效的定时器，或者清除在 componentDidMount 中创建的 DOM 元素，
+或者取消耗时长的请求。
+
+```js
+componentWillUnmount() {
+  axios({
+    url: 'http://jsonplaceholder.typicode.com/comments',
+    method: 'GET',
+    cancelToken: new axios.CancelToken(c => {
+      // 这个参数 c 就是 CancelToken 构造函数里面自带的取消请求的函数，这里把该函数当参数用
+      this.cancle = c;
+    }),
+  }).then(res => {
+    console.log(res);
+  }).catch(err => {
+    console.log(err);
+  });
+  setTimeout(() => {
+    this.cancle('主动取消');
+  }, 100);
+}
+```
+
 ## 使用 shouldComponentUpdate
+
+如果你要重写这个方法，你需要返回一个 true 或 false。
 
 使用 `shouldComponentUpdate` 的时候， 可以返回一个 boolean ，
 
