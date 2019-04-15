@@ -8,6 +8,8 @@
   - [react 生命周期](#react-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
   - [一切都可以做成组件](#%E4%B8%80%E5%88%87%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%81%9A%E6%88%90%E7%BB%84%E4%BB%B6)
     - [alert 组件](#alert-%E7%BB%84%E4%BB%B6)
+  - [遍历对象的属性](#%E9%81%8D%E5%8E%86%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7)
+    - [this.props.children](#thispropschildren)
 - [react-router-dom](#react-router-dom)
   - [获取参数路由：](#%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1)
   - [获取页面传参](#%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2%E4%BC%A0%E5%8F%82)
@@ -223,6 +225,14 @@ export default class Home extends Component {
 ```
 
 ## defaultProps 和类型检查 PropTypes
+
+> React.PropTypes 从 React v15.5 开始被移入了 prop-types，使用时需要留意;
+
+使用的时候：
+
+```js
+import propTypes from 'prop-types'
+```
 
 在下面这个例子中，父组件调用子组件由于某些原因，没有传递 `name` 属性，Hello 组件输出`Hello,`
 
@@ -524,6 +534,55 @@ export default class Home extends Component {
           click me
         </button>
         <AlertComponent ref="alert" />
+      </div>
+    );
+  }
+}
+```
+
+## 遍历对象的属性
+
+### this.props.children
+
+`this.props.children` 会返回组件对象的所有属性。React 提供一个工具方法 `React.Children` 来
+处理 `this.props.children`。我们可以用 `React.Children.map` 或 `React.Children.forEach` 来遍
+历子节点。
+
+```js
+React.Children.map(children, function[(thisArg)])
+```
+
+在包含在 `children` 里的每个子级上调用函数，调用的函数的 `this` 设置为 `thisArg` 。如果 `children` 是
+一个嵌套的对象或数组，它将被遍历。如果 `children` 是 `null` 或 `undefined`，返回 `null` 或 `undefined`
+而不是一个空数组。
+
+```js
+import React, { Component } from 'react';
+
+class Wrapper extends Component {
+  componentDidMount() {
+    console.log(React.Children);
+  }
+  render() {
+    return (
+      <ol>
+        {React.Children.map(this.props.children, child => {
+          return <li>{child}</li>;
+        })}
+      </ol>
+    );
+  }
+}
+
+export default class Home extends Component {
+  render() {
+    return (
+      <div>
+        <Wrapper>
+          <span>a</span>
+          <span>b</span>
+          <span>c</span>
+        </Wrapper>
       </div>
     );
   }
