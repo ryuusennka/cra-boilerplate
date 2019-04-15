@@ -3,13 +3,17 @@
   - [高阶组件 higher-order components(HOC)](#%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6-higher-order-componentshoc)
   - [defaultProps 和类型检查 PropTypes](#defaultprops-%E5%92%8C%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5-proptypes)
   - [使用 React render prop components 替代 HOC 高阶组件](#%E4%BD%BF%E7%94%A8-react-render-prop-components-%E6%9B%BF%E4%BB%A3-hoc-%E9%AB%98%E9%98%B6%E7%BB%84%E4%BB%B6)
+  - [state](#state)
   - [React State without a Constructor](#react-state-without-a-constructor)
   - [错误边界](#%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C)
   - [react 生命周期](#react-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
+    - [组件的生命周期可以分为三个时期](#%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%8F%AF%E4%BB%A5%E5%88%86%E4%B8%BA%E4%B8%89%E4%B8%AA%E6%97%B6%E6%9C%9F)
+    - [不安全的方法](#%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%B9%E6%B3%95)
   - [一切都可以做成组件](#%E4%B8%80%E5%88%87%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%81%9A%E6%88%90%E7%BB%84%E4%BB%B6)
     - [alert 组件](#alert-%E7%BB%84%E4%BB%B6)
   - [遍历对象的属性](#%E9%81%8D%E5%8E%86%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7)
     - [this.props.children](#thispropschildren)
+  - [ref 属性（获取真实的 DOM 节点）](#ref-%E5%B1%9E%E6%80%A7%E8%8E%B7%E5%8F%96%E7%9C%9F%E5%AE%9E%E7%9A%84-dom-%E8%8A%82%E7%82%B9)
 - [react-router-dom](#react-router-dom)
   - [获取参数路由：](#%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1)
   - [获取页面传参](#%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2%E4%BC%A0%E5%8F%82)
@@ -26,6 +30,10 @@
 - [技巧](#%E6%8A%80%E5%B7%A7)
   - [使用 react-powerplug 简化代码](#%E4%BD%BF%E7%94%A8-react-powerplug-%E7%AE%80%E5%8C%96%E4%BB%A3%E7%A0%81)
   - [显示或隐藏，少写一个 return](#%E6%98%BE%E7%A4%BA%E6%88%96%E9%9A%90%E8%97%8F%E5%B0%91%E5%86%99%E4%B8%80%E4%B8%AA-return)
+- [React-Native 相关](#react-native-%E7%9B%B8%E5%85%B3)
+  - [布局](#%E5%B8%83%E5%B1%80)
+    - [宽和高](#%E5%AE%BD%E5%92%8C%E9%AB%98)
+    - [与 css3 和而不同之处](#%E4%B8%8E-css3-%E5%92%8C%E8%80%8C%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84)
 - [其它资料](#%E5%85%B6%E5%AE%83%E8%B5%84%E6%96%99)
 
 # react 基础
@@ -231,7 +239,7 @@ export default class Home extends Component {
 使用的时候：
 
 ```js
-import propTypes from 'prop-types'
+import propTypes from 'prop-types';
 ```
 
 在下面这个例子中，父组件调用子组件由于某些原因，没有传递 `name` 属性，Hello 组件输出`Hello,`
@@ -461,6 +469,14 @@ const App = props => {
 export default App;
 ```
 
+## state
+
+state 是组件私有的，可以通过 `state = {}` 方式初始化，通过调用 `this.setState()` 来改变它。
+当 `state` 更新之后，组件就会重新渲染自己。
+
+`render` 方法依赖于 `this.props` 和 `this.state`，框架会确保渲染出来的 UI 界面总是与输入的
+`this.props`和`this.state`保持一致。
+
 ## React State without a Constructor
 
 比较下面代码有什么区别：
@@ -494,18 +510,157 @@ export default class Home extends Component {
 }
 ```
 
+以上两种方法在组件的生命周期中**都**仅执行一次，用于设置组件的初始化 state。
+
 ## 错误边界
 
 有时候，由于一个组件的错误(或说崩溃)，会导致整个页面一个空白。但是我们希望如果组件出错了，就不显示
 这个组件，其它的还是应该显示。
 
+```js
+// app.js
+import React, { Component } from 'react';
+import Broken from './Broken';
+import ErrorBoundary from './ErrorBoundary';
+
+class App extends Component {
+  state = {
+    counter: 0,
+  };
+
+  increment = () => {
+    this.setState(prevState => ({ counter: prevState.counter + 1 }));
+  };
+
+  decrement = () => {
+    this.setState(prevState => ({ counter: prevState.counter - 1 }));
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Hello React</h1>
+        <hr />
+        <div>Counter: {this.state.counter}</div>
+        <button className="btn btn-success" onClick={this.increment}>
+          Increment
+        </button>
+        <button className="btn btn-danger" onClick={this.decrement}>
+          Decrement
+        </button>
+        <hr />
+        <ErrorBoundary>
+          <Broken />
+        </ErrorBoundary>
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+```js
+// Broken.js
+import React, { Component } from 'react';
+
+export default class Broken extends Component {
+  render() {
+    return (
+      <div>
+        {null.map(item => (
+          <div>{item}</div>
+        ))}
+      </div>
+    );
+  }
+}
+```
+
+```js
+// ErrorBoundary.js
+import React, { Component } from 'react';
+
+export default class ErrorBoundary extends Component {
+  state = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
+  /**
+   * 类似于 try / catch
+   * 它会捕获一些错误，接收的两个参数是生命周期函数所规定好的
+   * 如果有错误就把 error, errorInfo 放进 state 中去
+   * 也就是说当这个子组件发生错误之后，就会触发 componentDidCatch 事件
+   *
+   * @param {*} error
+   * @param {*} errorInfo
+   */
+  componentDidCatch(error, errorInfo) {
+    this.setState({
+      hasError: true,
+      error,
+      errorInfo,
+    });
+  }
+  render() {
+    return this.state.hasError ? (
+      <React.Fragment>
+        <div>Oops, error occurred.</div>
+        <div>{this.state.error && this.state.error.toString()}</div>
+        <div>{this.state.errorInfo && this.state.errorInfo.componentStack}</div>
+      </React.Fragment>
+    ) : (
+      // 等于说这是一个父组件，它接收子组件
+      this.props.children
+    );
+  }
+}
+```
+
 ## react 生命周期
 
-[http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+在 iOS 中 UIViewController 提供了
+
+- `(void)viewWillAppear: ( B0OL )animated`，
+- `-(void )viewDidLoad` ,
+- `(void)viewWillDisappear: (B0OL ) animated`
+
+等生命周期方法，
+
+在 `Android`中 `Activity` 則提供了
+
+- onCreate()
+- onStart()
+- onResume()
+- onPause()
+- onStop()
+- onDestroy()
+
+等生命周期方法，遠些生命周期方法描述了一个界面从創建到銷毀的一生。
+
+- [http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/](http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+- [https://reactjs.org/docs/react-component.html 官方文档-组件及生命周期](https://reactjs.org/docs/react-component.html)
 
 ![image](https://wx2.sinaimg.cn/large/006vbNRogy1g231ft2w9ej30zj0i5af8.jpg)
 
 ![lifecycle](docs/assets/images/README-20190415141657.png)
+
+### 组件的生命周期可以分为三个时期
+
+- Mounting： 创建时
+- Updating： 更新时
+- Unmounting： 卸载时
+
+### 不安全的方法
+
+- componentWillMount
+- componentWillReceiveProps
+- componentWillUpdate
+
+使用这些生命周期方法通常会导致错误和不一致，因此将来会被弃用。在新的 React 版本中他们被标记为 UNSAFE。
+
+如果你使用了这些不安全的方法，请查阅[官方文档如何替换不安全的生命周期方法](https://reactjs.org/docs/react-component.html)
 
 ## 一切都可以做成组件
 
@@ -588,6 +743,56 @@ export default class Home extends Component {
   }
 }
 ```
+
+## ref 属性（获取真实的 DOM 节点）
+
+组件并不是真实的 DOM 节点，而是存在于内存之中的一-种数据结构，叫做虚拟 DOM
+(virtual DOM)。只有当它插入文档以后，才会变成真实的 DOM。根据 React 的设计，所有的 DOM 变
+动，都先在虚拟 DOM 上发生，然后再将实际发生变动的部分，反映在真实 DOM 上，这种算法叫做
+`DOM diff`，它可以极大提高网页的性能表现。
+
+但是，有时需要从组件获取真实 DOM 的节点，这时就要用到 ref 属性。
+
+```js
+import React, { Component } from 'react';
+
+class AlertComponent extends Component {
+  showAlert(message) {
+    alert(`Debug: ${message}`);
+  }
+  render() {
+    return null;
+  }
+}
+
+export default class Home extends Component {
+  handleClick = () => {
+    this.refs.alert.showAlert('MyTitle');
+  };
+  render() {
+    return (
+      <div>
+        <button className="btn btn-success" onClick={this.handleClick}>
+          click me
+        </button>
+        <AlertComponent ref="alert" />
+      </div>
+    );
+  }
+}
+```
+
+上面代码中，组件 MyTitle 的子节点有一个 Alert 组件， 为了调用这个组件提供的方法，这时就必须
+获取真实的 DOM 节点，虚拟 DOM 是拿不到用户输入的。为了做到这一-点，我们在使用这个组件
+的时候必须为其设置一个 ref 属性，然后 `this.refs.[refName]`就会返回这个真实的 DOM 节点。
+需要注意的是，由于 `this.refs.[refName]`属性获取的是真实 DOM，所以必须等到虚拟 DOM 插入文
+档以后，才能使用这个属性，否则会报错。上面代码中，通过为组件指定 **Click 事件的回调函数**，
+确保了只有**等到真实 DOM 发生 Click 事件之后**，才会读取 `this.refs.[refName]`属性。
+React 组件支持很多事件，除了 Click 事件以外，还有 KeyDown、Copy、 Scroll 等，完整的事件
+清单请查看官方文档。
+
+> 心得: ref 属性在开发中使用频率很高，使用它你可以获取到任何你想要获取的组件的对象，有了
+> 这个对象你就可以灵活地做很多事情，比如:读写对象的变量，甚至调用对象的函数。
 
 # react-router-dom
 
@@ -1107,6 +1312,26 @@ const Item = ({ item }) => <li>{item}</li>;
 
 export default App;
 ```
+
+# React-Native 相关
+
+## 布局
+
+### 宽和高
+
+- 在 React-Native 中，使用的是弹性盒子布局
+- 在 React-Native 中，尺寸是没有单位的，它代表了设备独立像素。
+
+### 与 css3 和而不同之处
+
+值得一提的是，React Native 中的 FlexBox 和 Web CSSS 上 FlexBox 工作方式是一样的。但有些地方还是有些出入的，如：
+
+- flexDirection: React Native 中默认为`flexDirection:'column'`，在 Web CSS 中默认为`flex-direction:'row'`
+- alignItems: React Native 中默认为`alignItems:'stretch'`，在 Web CSS 中默认`align-items:'flex-start'`
+- flex: 相比 Web CSS 的 flex 接受多参数，如:`flex: 2 2 10%;`，但在 React Native 中 flex 只接受一个参数
+- 不支持属性：align-content，flex-basis，order，flex-basis，flex-flow，flex-grow，flex-shrink
+
+以上是 React Native 中的 FlexBox 和 Web CSSS 上 FlexBox 的不同之处，记住这几点，你可以像在 Web CSSS 上使用 FlexBox 一样，在 React Native 中使用 FlexBox。
 
 # 其它资料
 
