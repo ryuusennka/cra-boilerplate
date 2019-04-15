@@ -1,39 +1,26 @@
 import React, { Component } from 'react';
-import Broken from './Broken';
-import ErrorBoundary from './ErrorBoundary';
 
-class App extends Component {
-  state = {
-    counter: 0,
+class AlertComponent extends Component {
+  showAlert(message) {
+    alert(`Debug: ${message}`);
+  }
+  render() {
+    return null;
+  }
+}
+
+export default class Home extends Component {
+  handleClick = () => {
+    this.refs.alert.showAlert('MyTitle');
   };
-
-  increment = () => {
-    this.setState(prevState => ({ counter: prevState.counter + 1 }));
-  };
-
-  decrement = () => {
-    this.setState(prevState => ({ counter: prevState.counter - 1 }));
-  };
-
   render() {
     return (
-      <div className="App">
-        <h1>Hello React</h1>
-        <hr />
-        <div>Counter: {this.state.counter}</div>
-        <button className="btn btn-success" onClick={this.increment}>
-          Increment
+      <div>
+        <button className="btn btn-success" onClick={this.handleClick}>
+          click me
         </button>
-        <button className="btn btn-danger" onClick={this.decrement}>
-          Decrement
-        </button>
-        <hr />
-        <ErrorBoundary>
-          <Broken />
-        </ErrorBoundary>
+        <AlertComponent ref="alert" />
       </div>
     );
   }
 }
-
-export default App;

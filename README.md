@@ -6,6 +6,8 @@
   - [React State without a Constructor](#react-state-without-a-constructor)
   - [错误边界](#%E9%94%99%E8%AF%AF%E8%BE%B9%E7%95%8C)
   - [react 生命周期](#react-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)
+  - [一切都可以做成组件](#%E4%B8%80%E5%88%87%E9%83%BD%E5%8F%AF%E4%BB%A5%E5%81%9A%E6%88%90%E7%BB%84%E4%BB%B6)
+    - [alert 组件](#alert-%E7%BB%84%E4%BB%B6)
 - [react-router-dom](#react-router-dom)
   - [获取参数路由：](#%E8%8E%B7%E5%8F%96%E5%8F%82%E6%95%B0%E8%B7%AF%E7%94%B1)
   - [获取页面传参](#%E8%8E%B7%E5%8F%96%E9%A1%B5%E9%9D%A2%E4%BC%A0%E5%8F%82)
@@ -489,6 +491,40 @@ export default class Home extends Component {
 ## react 生命周期
 
 ![image](https://wx2.sinaimg.cn/large/006vbNRogy1g231ft2w9ej30zj0i5af8.jpg)
+
+## 一切都可以做成组件
+
+### alert 组件
+
+```js
+import React, { Component } from 'react';
+
+class AlertComponent extends Component {
+  showAlert(message) {
+    alert(`Debug: ${message}`);
+  }
+  render() {
+    return null;
+  }
+}
+
+export default class Home extends Component {
+  handleClick = () => {
+    this.refs.alert.showAlert('MyTitle');
+  };
+  render() {
+    return (
+      <div>
+        <button className="btn btn-success" onClick={this.handleClick}>
+          click me
+        </button>
+        <AlertComponent ref="alert" />
+      </div>
+    );
+  }
+}
+
+```
 
 # react-router-dom
 
